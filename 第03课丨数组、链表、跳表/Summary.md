@@ -432,6 +432,78 @@ class Solution(object):
 课后作业
 [26. 删除排序数组中的重复项](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array/)
 [189. 旋转数组](https://leetcode-cn.com/problems/rotate-array/)
+
+解法1：切片
+```python
+class Solution(object):
+    def rotate(self, nums, k):
+        """
+        :type nums: List[int]
+        :type k: int
+        :rtype: None Do not return anything, modify nums in-place instead.
+        """
+        n = len(nums)
+        k %= n
+        if not n:
+            return
+        nums[:] = nums[n-k:] + nums[:n-k]
+```
+
+解法2：会超时, O(n^2)
+
+```python
+class Solution(object):
+    def rotate(self, nums, k):
+        """
+        :type nums: List[int]
+        :type k: int
+        :rtype: None Do not return anything, modify nums in-place instead.
+
+        """
+        n = len(nums)
+        k %= n
+        while k:
+            tmp = nums[-1]
+            for i in range(len(nums) - 1, 0, -1):
+                nums[i] = nums[i - 1]
+            nums[0] = tmp
+            k -= 1
+```
+
+解法3：三次反转
+
+```python
+class Solution(object):
+    def rotate(self, nums, k):
+        """
+        :type nums: List[int]
+        :type k: int
+        :rtype: None Do not return anything, modify nums in-place instead.
+
+        """
+        n = len(nums)
+        k %= n
+        nums[:] = nums[::-1]
+        nums[:k] = nums[:k][::-1]
+        nums[k:] = nums[k:][::-1]
+```
+
+解法4： 插入
+
+```python
+class Solution(object):
+    def rotate(self, nums, k):
+        """
+        :type nums: List[int]
+        :type k: int
+        :rtype: None Do not return anything, modify nums in-place instead.
+
+        """
+        n = len(nums)
+        k %= n
+        for _ in range(k):
+            nums.insert(0, nums.pop())
+```
 [21. 合并两个有序链表](https://leetcode-cn.com/problems/merge-two-sorted-lists/)
 
 解法1： 递归(最近重复子问题)
