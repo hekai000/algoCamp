@@ -300,6 +300,47 @@ class Solution(object):
 
 [24. 两两交换链表中的节点](https://leetcode-cn.com/problems/swap-nodes-in-pairs)
 
+解法1：递归
+
+```python
+class Solution(object):
+    def swapPairs(self, head):
+        """
+        :type head: ListNode
+        :rtype: ListNode
+        """
+        if not head or not head.next:
+            return head
+        first = head
+        second = head.next
+        first.next = self.swapPairs(second.next)
+        second.next = first
+        return second
+```
+
+解法2：迭代
+```python
+class Solution(object):
+    def swapPairs(self, head):
+        """
+        :type head: ListNode
+        :rtype: ListNode
+        """
+        dummy = ListNode(-1)
+        dummy.next = head
+        pre = dummy
+        while head and head.next:
+            first = head
+            second = head.next
+
+            pre.next = second
+            first.next = second.next
+            second.next = first
+
+            pre = first
+            head = first.next
+        return dummy.next
+```
 [141. 环形链表](https://leetcode-cn.com/problems/linked-list-cycle)
 
 解法1：快慢指针
@@ -428,9 +469,108 @@ class Solution(object):
         return ptr1
 ```
 [25. K 个一组翻转链表](https://leetcode-cn.com/problems/reverse-nodes-in-k-group/)
+解法：(栈， 尾插法， 递归)
 
+递归
+```python
+class Solution:
+    def reverseKGroup(self, head, k):
+        cur = head
+        count = 0
+        while cur and count!= k:
+            cur = cur.next
+            count += 1
+        if count == k:
+            cur = self.reverseKGroup(cur, k)
+            while count:
+                tmp = head.next
+                head.next = cur
+                cur = head
+                head = tmp
+                count -= 1
+            head = cur   
+        return head
+```
+
+迭代
+```python
+class Solution(object):
+    def reverseKGroup(self, head, k):
+        """
+        :type head: ListNode
+        :type k: int
+        :rtype: ListNode
+        """
+        dummy = ListNode(0)
+        dummy.next = head
+        pre = dummy
+        end = dummy
+        while end:
+            for i in range(k):
+                if not end:
+                    break
+                end = end.next
+            if not end:
+                break
+            start = pre.next
+            next = end.next
+            end.next = None
+            pre.next = self.reverseLinkedList(start)
+            start.next = next
+            pre = start
+            end = pre
+        return dummy.next
+    def reverseLinkedList(self, head):
+        pre = None
+        cur = head
+        while cur:
+            next = cur.next
+            cur.next = pre
+            pre = cur
+            cur = next
+        return pre
+```
 课后作业
 [26. 删除排序数组中的重复项](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array/)
+
+解法：双指针法
+```python
+class Solution(object):
+    def removeDuplicates(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        if not nums:
+            return 0
+        
+        j = 1
+        pivot = nums[0]
+        for i in range(1, len(nums)):
+            if nums[i] != pivot:
+                nums[j] = nums[i]
+                pivot = nums[i]
+                j += 1
+        return j
+```
+优化代码：
+```python
+class Solution(object):
+    def removeDuplicates(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        if not nums:
+            return 0
+        
+        j = 0
+        for i in range(1, len(nums)):
+            if nums[i] != nums[j]:
+                nums[j + 1] = nums[i]
+                j += 1
+        return j + 1
+```
 [189. 旋转数组](https://leetcode-cn.com/problems/rotate-array/)
 
 解法1：切片
