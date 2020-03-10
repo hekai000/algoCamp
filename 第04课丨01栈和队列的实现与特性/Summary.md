@@ -7,6 +7,28 @@
 
 预习题目
 [20. 有效的括号](https://leetcode-cn.com/problems/valid-parentheses/)
+
+解法：栈
+```python
+class Solution(object):
+    def isValid(self, s):
+        """
+        :type s: str
+        :rtype: bool
+        """
+        d = {"(": ")", "[": "]", "{": "}"}
+        stack = []
+        for i in s:
+            if i in d:
+                stack.append(i)
+            else:
+                if stack and d[stack[-1]] == i:
+                    stack.pop()
+                else:
+                    return False
+         
+        return not stack
+```
 [155. 最小栈](https://leetcode-cn.com/problems/min-stack/)
 
 实战题目
