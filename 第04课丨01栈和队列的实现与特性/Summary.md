@@ -88,6 +88,27 @@ class MinStack(object):
 
 实战题目
 [84. 柱状图中最大的矩形](https://leetcode-cn.com/problems/largest-rectangle-in-histogram)
+
+解法：栈
+```python
+class Solution(object):
+    def largestRectangleArea(self, heights):
+        """
+        :type heights: List[int]
+        :rtype: int
+        """
+        stack = []
+        heights = [0] + heights + [0]
+        res = 0
+        for i in range(len(heights)):
+            #print(stack)
+            while stack and heights[stack[-1]] > heights[i]:
+                tmp = stack.pop()
+                res = max(res, (i - stack[-1] - 1) * heights[tmp])
+            stack.append(i)
+        return res
+```
+
 [239. 滑动窗口最大值](https://leetcode-cn.com/problems/sliding-window-maximum)
 课后作业
 •	用 add first 或 add last 这套新的 API 改写 Deque 的代码
